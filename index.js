@@ -6,31 +6,36 @@ const wss = new Websocket.Server({ port : 4000});
 const metadata = new AWS.MetadataService();
 
 global.hostIpAddress = null;
-metadata.fetchMetadataToken(function (err, token) {
-    if (err) {
-      throw err;
-    } else {
-        metadata.request("/latest/meta-data/public-ipv4",{headers: { "x-aws-ec2-metadata-token": token },},
-        function (err, data) {
-            if (err) {
-                console.log("Error: " + err);
-            } else {
-                global.hostIpAddress = data;
-                console.log("The host IP address is: " + global.hostIpAddress);
-            }
-        }
-      );
-    }
-  });
 
-let DedicatedServer = {
-    host: global.hostIpAddress,
-    port: '7777',
-    status: 'running',
-    playerCount: 0
+// Definir una función asincrónica que obtiene la dirección IP
+async function fetchHostIpAddress() {
+  try {
+    const token = await metadata.fetchMetadataToken();
+    const data = await metadata.request("/latest/meta-data/public-ipv4", {
+      headers: { "x-aws-ec2-metadata-token": token },
+    });
+    global.hostIpAddress = data;
+    console.log("The host IP address is: " + global.hostIpAddress);
+  } catch (err) {
+    throw err;
+  }
 }
 
-console.log(DedicatedServer);
+
+
+// Llamar a la función asincrónica
+fetchHostIpAddress().then(() => {
+    // Una vez que global.hostIpAddress se haya asignado, declara DedicatedServer
+    let DedicatedServer = {
+      host: global.hostIpAddress,
+      port: '7777',
+      status: 'running',
+      playerCount: 0
+    };
+  
+    // Ahora puedes usar DedicatedServer
+    console.log(DedicatedServer);
+});
 
 /*const MIN_PORT_AVAILABILITY = 7777;
 const MAX_PORT_AVAILABILITY = 8000;
