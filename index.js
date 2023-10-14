@@ -7,15 +7,37 @@ const util = require('util');
 const wss = new Websocket.Server({ port : 4000});
 const metadata = new AWS.MetadataService();
 
-const fetchMetadataTokenPromisified = util.promisify(metadata.fetchMetadataToken);
-const requestPromisified = util.promisify(metadata.request);
+const MIN_PORT_AVAILABILITY = 7777;
+const MAX_PORT_AVAILABILITY = 8000;
 
+const usedPorts = []; // Lista global de puertos utilizados
+
+
+function getAvailablePort(){
+    while (true) {
+        const port = Math.floor(Math.random() * (MAX_PORT_AVAILABILITY - MIN_PORT_AVAILABILITY + 1)) + MIN_PORT_AVAILABILITY;
+        
+        // Verificar si el puerto está en la lista de puertos utilizados
+        if (!usedPorts.includes(port)) {
+          usedPorts.push(port); // Agregar el puerto a la lista de puertos utilizados
+          return port; // Devolver el puerto si no está en uso
+        }
+    }
+}
 
 global.hostIpAddress = null;
 
-function getHostIpAddress() {
-    
+function continueAfterGetIp(){
+    console.log("The host IP address is: " + global.hostIpAddress);
+    let DedicatedServer = {
+        host: global.hostIpAddress,
+        port: getRandomPort(),
+        status: 'running',
+        playerCount: 0
+    }
+    console.log(DedicatedServer);
 }
+
 
 
 function initApp() {
@@ -30,14 +52,8 @@ function initApp() {
                     console.log("Error: " + err);
                 } else {
                     global.hostIpAddress = data;
-                    console.log("The host IP address is: " + global.hostIpAddress);
-                    let DedicatedServer = {
-                        host: global.hostIpAddress,
-                        port: '7777',
-                        status: 'running',
-                        playerCount: 0
-                    }
-                    console.log(DedicatedServer);
+                    continueAfterGetIp();
+                    
                 }
             }
           );
@@ -49,8 +65,7 @@ function initApp() {
 // Llamar a la función de inicialización cuando se inicia la aplicación
 initApp();
 
-/*const MIN_PORT_AVAILABILITY = 7777;
-const MAX_PORT_AVAILABILITY = 8000;
+/*
 
 wss.on('connection', (ws) => {
     if(DedicatedServer.playerCount >= 2){
