@@ -1,41 +1,53 @@
 const Websocket = require('ws');
 const { spawn } = require('child_process');
 const AWS = require('aws-sdk');
+const util = require('util');
+
 
 const wss = new Websocket.Server({ port : 4000});
 const metadata = new AWS.MetadataService();
 
+const fetchMetadataTokenPromisified = util.promisify(metadata.fetchMetadataToken);
+const requestPromisified = util.promisify(metadata.request);
+
+
 global.hostIpAddress = null;
 
-// Definir una función asincrónica que obtiene la dirección IP
-async function fetchHostIpAddress() {
-  try {
-    const token = await metadata.fetchMetadataToken();
-    const data = await metadata.request("/latest/meta-data/public-ipv4", {
-      headers: { "x-aws-ec2-metadata-token": token },
-    });
-    global.hostIpAddress = data;
-    console.log("The host IP address is: " + global.hostIpAddress);
-  } catch (err) {
-    throw err;
-  }
+async function getHostIpAddress() {
+    try {
+        const token = await fetchMetadataTokenPromisified();
+        const data = await requestPromisified("/latest/meta-data/public-ipv4", {headers: { "x-aws-ec2-metadata-token": token },});
+        return data;
+    } catch (err) {
+        throw err;
+    }
 }
 
 
+function initApp() {
+    // Configuración de variables de entorno, conexión a bases de datos, etc.
+    console.log("Inicializando la aplicación...");
+    getHostIpAddress()
+    .then((hostIpAddress) => {
+        global.hostIpAddress = hostIpAddress;
+        console.log("The host IP address is: " + global.hostIpAddress);
+        let DedicatedServer = {
+            host: global.hostIpAddress,
+            port: '7777',
+            status: 'running',
+            playerCount: 0
+        }
+        console.log(DedicatedServer);
+    })
+    .catch((err) => {
+        console.error("Error:", err);
+    });
+    startApp();
+}
 
-// Llamar a la función asincrónica
-fetchHostIpAddress().then(() => {
-    // Una vez que global.hostIpAddress se haya asignado, declara DedicatedServer
-    let DedicatedServer = {
-      host: global.hostIpAddress,
-      port: '7777',
-      status: 'running',
-      playerCount: 0
-    };
-  
-    // Ahora puedes usar DedicatedServer
-    console.log(DedicatedServer);
-});
+
+// Llamar a la función de inicialización cuando se inicia la aplicación
+initApp();
 
 /*const MIN_PORT_AVAILABILITY = 7777;
 const MAX_PORT_AVAILABILITY = 8000;
