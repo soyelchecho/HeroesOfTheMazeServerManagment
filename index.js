@@ -7,15 +7,22 @@ const metadata = new AWS.MetadataService();
 
 global.hostIpAddress = null;
 
-metadata.request('/latest/meta-data/public-ipv4', function(err, data) {
+metadata.fetchMetadataToken(function (err, token) {
     if (err) {
-        console.log("Error: " + err);
+      throw err;
     } else {
-        global.hostIpAddress = data;
-        console.log("The host IP address is: " + global.hostIpAddress);
-
+      meta.request("/latest/meta-data/public-ipv4",{headers: { "x-aws-ec2-metadata-token": token },},
+        function (err, data) {
+            if (err) {
+                console.log("Error: " + err);
+            } else {
+                global.hostIpAddress = data;
+                console.log("The host IP address is: " + global.hostIpAddress);
+            }
+        }
+      );
     }
-});
+  });
 
 let DedicatedServer = {
     host: global.hostIpAddress,
