@@ -13,34 +13,35 @@ const requestPromisified = util.promisify(metadata.request);
 
 global.hostIpAddress = null;
 
-async function getHostIpAddress() {
-    try {
-        const token = await fetchMetadataTokenPromisified();
-        const data = await requestPromisified("/latest/meta-data/public-ipv4", {headers: { "x-aws-ec2-metadata-token": token },});
-        return data;
-    } catch (err) {
-        throw err;
-    }
+function getHostIpAddress() {
+    
 }
 
 
 function initApp() {
     // Configuración de variables de entorno, conexión a bases de datos, etc.
-    console.log("Inicializando la aplicación...");
-    getHostIpAddress()
-    .then((hostIpAddress) => {
-        global.hostIpAddress = hostIpAddress;
-        console.log("The host IP address is: " + global.hostIpAddress);
-        let DedicatedServer = {
-            host: global.hostIpAddress,
-            port: '7777',
-            status: 'running',
-            playerCount: 0
+    metadata.fetchMetadataToken(function (err, token) {
+        if (err) {
+          throw err;
+        } else {
+            metadata.request("/latest/meta-data/public-ipv4",{headers: { "x-aws-ec2-metadata-token": token },},
+            function (err, data) {
+                if (err) {
+                    console.log("Error: " + err);
+                } else {
+                    global.hostIpAddress = hostIpAddress;
+                    console.log("The host IP address is: " + global.hostIpAddress);
+                    let DedicatedServer = {
+                        host: global.hostIpAddress,
+                        port: '7777',
+                        status: 'running',
+                        playerCount: 0
+                    }
+                    console.log(DedicatedServer);
+                }
+            }
+          );
         }
-        console.log(DedicatedServer);
-    })
-    .catch((err) => {
-        console.error("Error:", err);
     });
 }
 
