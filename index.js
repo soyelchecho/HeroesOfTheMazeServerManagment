@@ -29,7 +29,7 @@ function initApp() {
                 if (err) {
                     console.log("Error: " + err);
                 } else {
-                    global.hostIpAddress = hostIpAddress;
+                    global.hostIpAddress = data;
                     console.log("The host IP address is: " + global.hostIpAddress);
                     let DedicatedServer = {
                         host: global.hostIpAddress,
