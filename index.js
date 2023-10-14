@@ -31,7 +31,7 @@ function continueAfterGetIp(){
     console.log("The host IP address is: " + global.hostIpAddress);
     let DedicatedServer = {
         host: global.hostIpAddress,
-        port: getRandomPort(),
+        port: getAvailablePort(),
         status: 'running',
         playerCount: 0
     }
