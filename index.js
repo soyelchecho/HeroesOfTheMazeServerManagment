@@ -42,7 +42,6 @@ function initApp() {
     .catch((err) => {
         console.error("Error:", err);
     });
-    startApp();
 }
 
 
