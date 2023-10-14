@@ -18,13 +18,15 @@ metadata.request('/latest/meta-data/public-ipv4', function(err, data) {
 });
 
 let DedicatedServer = {
-    host: '18.223.102.7',
+    host: global.hostIpAddress,
     port: '7777',
     status: 'running',
     playerCount: 0
 }
 
-const MIN_PORT_AVAILABILITY = 7777;
+console.log(DedicatedServer);
+
+/*const MIN_PORT_AVAILABILITY = 7777;
 const MAX_PORT_AVAILABILITY = 8000;
 
 wss.on('connection', (ws) => {
@@ -47,4 +49,4 @@ wss.on('connection', (ws) => {
 
 function StartDedicatedServer(){
     const serverstartcommand = ""
-}
+}*/
