@@ -6,12 +6,11 @@ const wss = new Websocket.Server({ port : 4000});
 const metadata = new AWS.MetadataService();
 
 global.hostIpAddress = null;
-
 metadata.fetchMetadataToken(function (err, token) {
     if (err) {
       throw err;
     } else {
-      meta.request("/latest/meta-data/public-ipv4",{headers: { "x-aws-ec2-metadata-token": token },},
+        metadata.request("/latest/meta-data/public-ipv4",{headers: { "x-aws-ec2-metadata-token": token },},
         function (err, data) {
             if (err) {
                 console.log("Error: " + err);
