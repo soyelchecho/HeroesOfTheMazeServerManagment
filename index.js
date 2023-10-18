@@ -54,14 +54,6 @@ const RANGEELO = [
 
 
 function continueAfterGetIp(){
-    let DedicatedServer = {
-        host: global.hostIpAddress,
-        recommendedElo: { min: 60, max: 150 },
-        port: getAvailablePort(),
-        status: 'running',
-        playerCount: 0
-    }
-    console.log(DedicatedServer);
     wss.on('connection', (ws) => {
         playersConnected++;
 
