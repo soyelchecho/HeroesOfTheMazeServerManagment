@@ -14,7 +14,7 @@ const MIN_PORT_AVAILABILITY = 7777;
 const MAX_PORT_AVAILABILITY = 8000;
 
 // Ruta relativa al archivo index.js al archivo UTCPlaygroundServer-Arm64.sh
-const SERVER_EXECUTE_RELATIVE_PATH = './HeroesOfTheMazeServer/UTCPlaygroundServer-Arm64.sh';
+const SERVER_EXECUTE_RELATIVE_PATH = './LegendsOfTheMazeServer/UTCPlaygroundServer-Arm64.sh';
 
 
 const usedPorts = []; // Lista global de puertos utilizados
@@ -62,10 +62,11 @@ function continueAfterGetIp(){
             if(ParsedData.type == 'findingmatch'){
                 const {PlayerID, elo} = ParsedData.data;
                 serverForPlayer = findOrCreateServer(elo);
-                // Envía la información de serverForPlayer de vuelta al cliente
+                // Envía la informacion de que servidor entrar al cliente
                 ws.send(JSON.stringify({ type: 'servermatch', data: serverForPlayer }));
             }
-        })
+        });
+        ws.send(JSON.stringify({ type: 'connection_success', data: {'status': 200} }));
     });
 }
 
