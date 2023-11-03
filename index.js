@@ -64,7 +64,7 @@ function continueAfterGetIp(){
             console.log(data);
             console.log(ParsedData);
             if(ParsedData.type == 'findingmatch'){
-                const {PlayerID, elo} = ParsedData.data;
+                const {elo} = ParsedData.data;
                 serverForPlayer = findOrCreateServer(elo);
                 // Envía la informacion de que servidor entrar al cliente
                 ws.send(JSON.stringify({ type: 'servermatch', data: serverForPlayer }));
