@@ -55,10 +55,14 @@ const RANGEELO = [
 
 function continueAfterGetIp(){
     wss.on('connection', (ws) => {
+        console.log("New player conneted");
         playersConnected++;
 
         ws.on('message', function message(data){
             const ParsedData = JSON.parse(data);
+            console.log("Player is trying to find a server with data: ");
+            console.log(data);
+            console.log(ParsedData);
             if(ParsedData.type == 'findingmatch'){
                 const {PlayerID, elo} = ParsedData.data;
                 serverForPlayer = findOrCreateServer(elo);
