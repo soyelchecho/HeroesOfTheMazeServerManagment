@@ -14,7 +14,7 @@ const MIN_PORT_AVAILABILITY = 7777;
 const MAX_PORT_AVAILABILITY = 8000;
 
 // Ruta relativa al archivo index.js al archivo UTCPlaygroundServer.sh
-const SERVER_EXECUTE_RELATIVE_PATH = './LegendsOfTheMazeServer/UTCPlaygroundServer.sh';
+const SERVER_EXECUTE_RELATIVE_PATH = './LegendsOfTheMaze/UTCPlaygroundServer.sh';
 
 
 const usedPorts = []; // Lista global de puertos utilizados
