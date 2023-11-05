@@ -118,38 +118,13 @@ function createServer(elo){
 function StartNewDedicatedServer(ServerToStart){
     // Obtén el path absoluto
     const absolutePathServerExec = path.resolve(__dirname, SERVER_EXECUTE_RELATIVE_PATH);
-    console.log('Path absoluto del server: ', absolutePathServerExec);
     portToUse = ServerToStart.port;
 
-    // Ruta del archivo .sh (en la misma ubicación que tu script Node.js)
-    const shellScriptPath = './UTCPlaygroundServer.sh ';
-
-    const serverStartCommand = absolutePathServerExec + ' -log -port '  + portToUse;
-    serverStartCommand = shellScriptPath + serverStartCommand;
+    //const serverStartCommand = absolutePathServerExec + ' -log -port '  + portToUse;
+    const serverStartCommand = absolutePathServerExec + ' -log -port 7782';
     console.log("Command to execute: " + serverStartCommand); 
 
-    // Ejecutar el archivo .sh
-    const backgroundServerProcess  = exec(`sh ${shellScriptPath}`, { detached: true, stdio: ['ignore', 'pipe', 'pipe'] });
-    backgroundServerProcess.unref();
-    // Manejo de la salida estándar y los errores
-    backgroundServerProcess.stdout.on('data', (data) => {
-        console.log(`Salida estándar: ${data}`);
-    });
-
-    backgroundServerProcess.stderr.on('data', (data) => {
-        console.error(`Error estándar: ${data}`);
-    });
-
-    backgroundServerProcess.on('close', (code) => {
-        console.log(`Proceso en segundo plano se cerró con código de salida ${code}`);
-    });
-
-    
-    backgroundServerProcess.on('exit', (code) => {
-        console.log(`El archivo .sh ha terminado con código de salida ${code}`);
-    });
-
-    /*const commandParts = serverStartCommand.split(' ');
+    const commandParts = serverStartCommand.split(' ');
 
     const serverProcess = spawn(commandParts[0], commandParts.slice(1));
     // backgroundServerProcess = exec(serverStartCommand, { detached: true, stdio: ['ignore', 'pipe', 'pipe'] });
@@ -164,7 +139,7 @@ function StartNewDedicatedServer(ServerToStart){
     
     serverProcess.on('exit', function (code) {
         console.log('Server process exited with code ' + code.toString());
-    });*/
+    });
 
     /*// Desconectamos el proceso principal del proceso en segundo plano
     backgroundServerProcess.unref();
