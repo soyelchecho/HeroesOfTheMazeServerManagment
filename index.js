@@ -123,9 +123,16 @@ function StartNewDedicatedServer(ServerToStart){
 
     const serverStartCommand = absolutePathServerExec + ' -log -port '  + portToUse;
     console.log("Command to execute: " + serverStartCommand); 
-    backgroundServerProcess = exec(serverStartCommand, { detached: true, stdio: ['ignore', 'pipe', 'pipe'] });
+    // backgroundServerProcess = exec(serverStartCommand, { detached: true, stdio: ['ignore', 'pipe', 'pipe'] });
 
-    // Desconectamos el proceso principal del proceso en segundo plano
+    backgroundServerProcess = exec(serverStartCommand, (error, stdout, stderr) =>{
+        if(error){
+            console.log("Error masive");
+            console.log(error);
+        }
+    });
+
+    /*// Desconectamos el proceso principal del proceso en segundo plano
     backgroundServerProcess.unref();
     // Manejo de la salida estándar y los errores
     backgroundServerProcess.stdout.on('data', (data) => {
@@ -141,7 +148,7 @@ function StartNewDedicatedServer(ServerToStart){
     });
 
     console.log('Proceso en segundo plano iniciado.');
-    listOfProcess.push(backgroundServerProcess);
+    listOfProcess.push(backgroundServerProcess);*/
 }
 
 
