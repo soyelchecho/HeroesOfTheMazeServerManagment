@@ -3,7 +3,6 @@ const exec = require('child_process').exec;
 const AWS = require('aws-sdk');
 const util = require('util');
 const path = require('path');
-const { stderr } = require('process');
 
 const wss = new Websocket.Server({ port : 4000});
 const metadata = new AWS.MetadataService();
@@ -122,22 +121,10 @@ function StartNewDedicatedServer(ServerToStart){
     console.log('Path absoluto del server: ', absolutePathServerExec);
     portToUse = ServerToStart.port;
 
-    const serverStartCommand = absolutePathServerExec + ' -log -port ${portToUse}';
-    //backgroundServerProcess = exec(serverStartCommand, { detached: true, stdio: ['ignore', 'pipe', 'pipe'] });
-    console.log("Server Command");
-    console.log(serverStartCommand)
-    exec(serverStartCommand , (error, stdout, stderr) =>{
-        if(error){
-            console.log("Error");
-            console.log(error);
-            return;
-        }
-        console.log("stdout")
-        console.log(stdout);
-        console.log(stderr);
-        console.log(stderr);
-    })
-/*
+    const serverStartCommand = absolutePathServerExec + ' -log -port '  + portToUse;
+    console.log("Command to execute: " + serverStartCommand); 
+    backgroundServerProcess = exec(serverStartCommand, { detached: true, stdio: ['ignore', 'pipe', 'pipe'] });
+
     // Desconectamos el proceso principal del proceso en segundo plano
     backgroundServerProcess.unref();
     // Manejo de la salida estándar y los errores
@@ -154,7 +141,7 @@ function StartNewDedicatedServer(ServerToStart){
     });
 
     console.log('Proceso en segundo plano iniciado.');
-    listOfProcess.push(backgroundServerProcess);*/
+    listOfProcess.push(backgroundServerProcess);
 }
 
 
