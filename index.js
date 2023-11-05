@@ -170,11 +170,17 @@ initApp();
 
 function stopAllBackgroundProcesses() {
     listOfProcess.forEach((backgroundProcess) => {
-      process.kill(-backgroundProcess.pid); // Mata el proceso en segundo plano y sus hijos
-      console.log('Proceso en segundo plano detenido.');
+        try {
+            process.kill(-backgroundProcess.pid);
+            console.log('Proceso en segundo plano detenido.');
+        } catch (err) {
+            // Handle the error gracefully, e.g., log it
+            console.error('Error stopping background process:', err);
+        }
     });
     listOfProcess.length = 0; // Vaciar la lista
 }
+
 
 function exitHandler(options, exitCode) {
     stopAllBackgroundProcesses();
