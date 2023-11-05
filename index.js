@@ -1,5 +1,5 @@
 const Websocket = require('ws');
-const exec = require('child_process').exec;
+const spawn = require('child_process').spawn;
 const AWS = require('aws-sdk');
 const util = require('util');
 const path = require('path');
@@ -123,13 +123,22 @@ function StartNewDedicatedServer(ServerToStart){
 
     const serverStartCommand = absolutePathServerExec + ' -log -port '  + portToUse;
     console.log("Command to execute: " + serverStartCommand); 
+
+    const commandParts = serverStartCommand.split(' ');
+
+    const serverProcess = spawn(commandParts[0], commandParts.slice(1));
     // backgroundServerProcess = exec(serverStartCommand, { detached: true, stdio: ['ignore', 'pipe', 'pipe'] });
 
-    backgroundServerProcess = exec(serverStartCommand, (error, stdout, stderr) =>{
-        if(error){
-            console.log("Error masive");
-            console.log(error);
-        }
+    serverProcess.stdout.on('data', function (data) {
+        console.log('Server stdout: ' + data.toString());
+    });
+    
+    serverProcess.stderr.on('data', function (data) {
+        console.log('Server stderr: ' + data.toString());
+    });
+    
+    serverProcess.on('exit', function (code) {
+        console.log('Server process exited with code ' + code.toString());
     });
 
     /*// Desconectamos el proceso principal del proceso en segundo plano
