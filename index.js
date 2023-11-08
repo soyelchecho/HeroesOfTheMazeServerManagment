@@ -120,14 +120,11 @@ function StartNewDedicatedServer(ServerToStart){
     const absolutePathServerExec = path.resolve(__dirname, SERVER_EXECUTE_RELATIVE_PATH);
     portToUse = ServerToStart.port;
 
-    //const serverStartCommand = absolutePathServerExec + ' -log -port '  + portToUse;
-    const serverStartCommand = absolutePathServerExec + ' -log -port 7782';
-    console.log("Command to execute: " + serverStartCommand); 
+    const serverStartCommand = absolutePathServerExec + ' -port ' + portToUse + ' -log'+ ' -server';
 
     const commandParts = serverStartCommand.split(' ');
 
     const serverProcess = spawn(commandParts[0], commandParts.slice(1));
-    // backgroundServerProcess = exec(serverStartCommand, { detached: true, stdio: ['ignore', 'pipe', 'pipe'] });
 
     serverProcess.stdout.on('data', function (data) {
         console.log('Server stdout: ' + data.toString());
