@@ -78,14 +78,16 @@ function continueAfterGetIp(){
 function findOrCreateServer(elo) {
     for (let i = 0; i < listOfServers.length; i++) {
       const server = listOfServers[i];
-      if (elo >= server.recommendedElo.min && elo <= server.recommendedElo.max) {
+      if (elo >= server.recommendedElo.min && elo <= server.recommendedElo.max && server.playerCount < 2) {
         // Se encontró un servidor adecuado
+        listOfServers[i].playerCount++;
         return server;
       }
     }
   
     // Si no se encontró un servidor adecuado, llama a la función para crear un nuevo servidor
     const newServer = createServer(elo); // Debes definir la función createServer
+    newServer.playerCount++;
     listOfServers.push(newServer);
     return newServer;
 }
