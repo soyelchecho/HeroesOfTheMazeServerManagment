@@ -153,7 +153,7 @@ function StartNewDedicatedServer(ServerToStart){
             listOfProcess.splice(index, 1);
         }
         StopServer(serverProcess);
-    }, 1 * 60 * 1000); // 5 minutos en milisegundos
+    }, 5 * 60 * 1000); // 5 minutos en milisegundos
 }
 
 
