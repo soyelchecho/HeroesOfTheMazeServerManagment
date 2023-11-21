@@ -81,6 +81,8 @@ function findOrCreateServer(elo) {
       if (elo >= server.recommendedElo.min && elo <= server.recommendedElo.max && server.playerCount < 2) {
         // Se encontró un servidor adecuado
         listOfServers[i].playerCount++;
+        console.log("Server Found");
+        console.log(listOfServers[i]);
         return server;
       }
     }
@@ -88,6 +90,8 @@ function findOrCreateServer(elo) {
     // Si no se encontró un servidor adecuado, llama a la función para crear un nuevo servidor
     const newServer = createServer(elo); // Debes definir la función createServer
     newServer.playerCount++;
+    console.log("Server creado");
+    console.log(newServer);
     listOfServers.push(newServer);
     return newServer;
 }
