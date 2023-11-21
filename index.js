@@ -140,7 +140,7 @@ function StartNewDedicatedServer(ServerToStart){
         console.log('Server process exited with code ' + code.toString());
     });
 
-    listOfProcess.add(serverProcess);
+    listOfProcess.push(serverProcess);
 
     // Establecer un temporizador de 5 minutos para detener el servidor
     timeoutId = setTimeout(() => {
