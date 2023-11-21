@@ -126,7 +126,7 @@ function StartNewDedicatedServer(ServerToStart){
     const absolutePathServerExec = path.resolve(__dirname, SERVER_EXECUTE_RELATIVE_PATH);
     portToUse = ServerToStart.port;
 
-    const serverStartCommand = absolutePathServerExec + ' -port ' + portToUse + ' -log'+ ' -server';
+    const serverStartCommand = absolutePathServerExec + ' -port ' + portToUse + ' -server' + ' -log';
 
     const commandParts = serverStartCommand.split(' ');
 
@@ -148,6 +148,10 @@ function StartNewDedicatedServer(ServerToStart){
 
     // Establecer un temporizador de 5 minutos para detener el servidor
     timeoutId = setTimeout(() => {
+        const index = listOfProcess.indexOf(serverProcess);
+        if (index !== -1) {
+            listOfProcess.splice(index, 1);
+        }
         StopServer(serverProcess);
     }, 1 * 60 * 1000); // 5 minutos en milisegundos
 }
