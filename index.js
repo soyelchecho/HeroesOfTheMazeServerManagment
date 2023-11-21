@@ -138,25 +138,24 @@ function StartNewDedicatedServer(ServerToStart){
         console.log('Server process exited with code ' + code.toString());
     });
 
-    /*// Desconectamos el proceso principal del proceso en segundo plano
-    backgroundServerProcess.unref();
-    // Manejo de la salida estándar y los errores
-    backgroundServerProcess.stdout.on('data', (data) => {
-        console.log(`Salida estándar: ${data}`);
-    });
+    listOfProcess.add(serverProcess);
 
-    backgroundServerProcess.stderr.on('data', (data) => {
-        console.error(`Error estándar: ${data}`);
-    });
-
-    backgroundServerProcess.on('close', (code) => {
-        console.log(`Proceso en segundo plano se cerró con código de salida ${code}`);
-    });
-
-    console.log('Proceso en segundo plano iniciado.');
-    listOfProcess.push(backgroundServerProcess);*/
+    // Establecer un temporizador de 5 minutos para detener el servidor
+    timeoutId = setTimeout(() => {
+        StopServer(serverProcess);
+    }, 1 * 60 * 1000); // 5 minutos en milisegundos
 }
 
+
+
+function StopServer(serverProcess) {
+    if (serverProcess) {
+        console.log('Deteniendo el servidor...');
+        serverProcess.kill();
+    } else {
+        console.log('El servidor no está en ejecución.');
+    }
+}
 
 
 function initApp() {
